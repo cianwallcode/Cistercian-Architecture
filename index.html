@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cistercian Architecture</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
@@ -19,28 +20,93 @@
     <main id="app">
         <section id="landing" class="page active">
             <h1>The Cistercian Paradigm</h1>
-            <p>An exploration of structural austerity and the 12th-century monastic reformation.</p>
+            <p>An architectural and historical analysis of the Order of Cistercians in Ireland.</p>
             <button class="cta-button" onclick="showPage('location-map')">Start Project</button>
-            <div class="spacer"></div>
-            <p>The Cistercian Order, or <em>Ordo Cisterciensis</em>, emphasized a return to strict adherence to the Rule of Saint Benedict. Architecturally, this manifested as a rejection of Cluniac ornamentation, favoring geometric purity, light, and the manipulation of spatial volumes to facilitate spiritual contemplation.</p>
         </section>
 
         <section id="location-map" class="page">
             <h2>Location Map</h2>
-            <div id="map-placeholder">
-                [Geospatial distribution of Cistercian Abbeys: Citeaux, Clairvaux, La Ferté, Pontigny, Morimond]
+            <div class="filter-controls">
+                <label>
+                    <input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All Foundations
+                </label>
+                <label>
+                    <input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist (O.C.S.O.) Only
+                </label>
             </div>
-            <p>The diffusion of the Order followed a rigid filiation system. Each foundation maintained structural homogeneity, often utilizing the "Bernardin plan" to ensure liturgical efficiency.</p>
+            <div id="map-container">
+                <div id="map"></div>
+            </div>
         </section>
 
         <section id="detail-analysis" class="page">
-            <h2>Detail Analysis: Structural Morphology</h2>
-            <p>Cistercian morphology is characterized by:</p>
-            <ul>
-                <li><strong>The Pointed Arch:</strong> Utilized for structural efficacy, allowing for higher, thinner walls and maximized verticality.</li>
-                <li><strong>The Cloister:</strong> Defined by a square peripteral space, central to the monastic movement, acting as a transition zone between the profane and the divine.</li>
-                <li><strong>Absence of Ornamentation:</strong> The intentional exclusion of figurative sculpture and stained glass, prioritizing the interplay of light on raw stone surfaces.</li>
-            </ul>
+            <h2>Detail Analysis</h2>
+            
+            <section class="analysis-section">
+                <h3>Architectural Elements</h3>
+                <dl>
+                    <dt>The Cloister</dt>
+                    <dd>Central to the monastic spatial logic, providing the primary circulation and meditative zone.</dd>
+                    <dt>The Roof</dt>
+                    <dd>Evolutionary progression from simple timber framing to more complex stone vaulting.</dd>
+                    <dt>The Lancet Window</dt>
+                    <dd>A primary indicator of the "Early English" style adopted during the 13th century.</dd>
+                    <dt>The Entrance</dt>
+                    <dd>Transitional portals moving from Romanesque rounded arches to the pointed Gothic arch.</dd>
+                </dl>
+            </section>
+
+            <section class="analysis-section">
+                <h3>Chronological Foundations</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>County</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>St. Mary's, Dublin</td><td>Dublin</td><td>1139</td></tr>
+                            <tr><td>Mellifont Abbey</td><td>Louth</td><td>1142</td></tr>
+                            <tr><td>Bective Abbey</td><td>Meath</td><td>1147</td></tr>
+                            <tr><td>Baltinglass Abbey</td><td>Wicklow</td><td>1148</td></tr>
+                            <tr><td>Boyle Abbey</td><td>Roscommon</td><td>1148</td></tr>
+                            <tr><td>Inislounaght (Suir)</td><td>Tipperary</td><td>1148</td></tr>
+                            <tr><td>Monasteranenagh</td><td>Limerick</td><td>1148</td></tr>
+                            <tr><td>Abbeyshrule</td><td>Longford</td><td>1150</td></tr>
+                            <tr><td>Kilbeggan Abbey</td><td>Westmeath</td><td>1150</td></tr>
+                            <tr><td>Newry Abbey</td><td>Down</td><td>1153</td></tr>
+                            <tr><td>Abbeydorney</td><td>Kerry</td><td>1154</td></tr>
+                            <tr><td>Kilenny Abbey</td><td>Kilkenny</td><td>1162</td></tr>
+                            <tr><td>Fermoy Abbey</td><td>Cork</td><td>1170</td></tr>
+                            <tr><td>Glangragh Abbey</td><td>Waterford</td><td>1170</td></tr>
+                            <tr><td>Abbeymahon</td><td>Cork</td><td>1172</td></tr>
+                            <tr><td>Dunbrody Abbey</td><td>Wexford</td><td>1175</td></tr>
+                            <tr><td>Inch Abbey</td><td>Down</td><td>1177</td></tr>
+                            <tr><td>Monasterevin Abbey</td><td>Kildare</td><td>1178</td></tr>
+                            <tr><td>Assaroe Abbey</td><td>Donegal</td><td>1178</td></tr>
+                            <tr><td>Holy Cross Abbey</td><td>Tipperary</td><td>1180</td></tr>
+                            <tr><td>Jerpoint Abbey</td><td>Kilkenny</td><td>1180</td></tr>
+                            <tr><td>Midleton Abbey</td><td>Cork</td><td>1180</td></tr>
+                            <tr><td>Abbeyleix</td><td>Laois</td><td>1184</td></tr>
+                            <tr><td>Kilcooly Abbey</td><td>Tipperary</td><td>1185</td></tr>
+                            <tr><td>Abbeyknockmoy</td><td>Galway</td><td>1190</td></tr>
+                            <tr><td>Grey Abbey</td><td>Down</td><td>1193</td></tr>
+                            <tr><td>Corcomroe Abbey</td><td>Clare</td><td>1194</td></tr>
+                            <tr><td>Comber Abbey</td><td>Down</td><td>1199</td></tr>
+                            <tr><td>Tintern Abbey</td><td>Wexford</td><td>1200</td></tr>
+                            <tr><td>Duiske Abbey</td><td>Kilkenny</td><td>1204</td></tr>
+                            <tr><td>Abington Abbey</td><td>Limerick</td><td>1206</td></tr>
+                            <tr><td>Abbey of Lerha</td><td>Longford</td><td>1214</td></tr>
+                            <tr><td>Macosquin Abbey</td><td>Londonderry</td><td>1218</td></tr>
+                            <tr><td>Tracton Abbey</td><td>Cork</td><td>1224</td></tr>
+                            <tr><td>Hore Abbey</td><td>Tipperary</td><td>1272</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </section>
     </main>
 
@@ -49,6 +115,7 @@
         <p>Contact: archives@cistercian-arch.edu</p>
     </footer>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
