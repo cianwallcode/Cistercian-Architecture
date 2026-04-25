@@ -4,8 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cistercian Architecture</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root { --primary-orange: #FF8C00; --bg-white: #ffffff; --text-black: #000000; }
+        body { margin: 0; font-family: 'Times New Roman', serif; background-color: var(--bg-white); color: var(--text-black); }
+        
+        header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 2px solid var(--primary-orange); align-items: center; }
+        .logo { font-weight: bold; cursor: pointer; font-size: 1.5rem; }
+        nav button { background: none; border: 1px solid var(--text-black); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; }
+        
+        .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 80vh; }
+        .page.active { display: block; }
+        
+        .cta-button { background: var(--primary-orange); color: var(--bg-white); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; }
+        
+        #map-container { height: 500px; width: 100%; border: 1px solid var(--text-black); margin-top: 1rem; }
+        #map { height: 100%; width: 100%; }
+        
+        footer { border-top: 1px solid var(--text-black); padding: 2rem; text-align: center; font-size: 0.8rem; }
+        
+        .table-container { overflow-x: auto; margin-top: 2rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .filter-controls { margin-bottom: 1rem; padding: 1rem; background: #f9f9f9; border: 1px solid #ddd; }
+    </style>
 </head>
 <body>
 
@@ -27,82 +50,36 @@
         <section id="location-map" class="page">
             <h2>Location Map</h2>
             <div class="filter-controls">
-                <label>
-                    <input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All Foundations
-                </label>
-                <label>
-                    <input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist (O.C.S.O.) Only
-                </label>
+                <label><input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All Foundations</label>
+                <label><input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist (O.C.S.O.) Only</label>
             </div>
-            <div id="map-container">
-                <div id="map"></div>
-            </div>
+            <div id="map-container"><div id="map"></div></div>
         </section>
 
         <section id="detail-analysis" class="page">
             <h2>Detail Analysis</h2>
             
             <section class="analysis-section">
-                <h3>Architectural Elements</h3>
-                <dl>
-                    <dt>The Cloister</dt>
-                    <dd>Central to the monastic spatial logic, providing the primary circulation and meditative zone.</dd>
-                    <dt>The Roof</dt>
-                    <dd>Evolutionary progression from simple timber framing to more complex stone vaulting.</dd>
-                    <dt>The Lancet Window</dt>
-                    <dd>A primary indicator of the "Early English" style adopted during the 13th century.</dd>
-                    <dt>The Entrance</dt>
-                    <dd>Transitional portals moving from Romanesque rounded arches to the pointed Gothic arch.</dd>
-                </dl>
-            </section>
-
-            <section class="analysis-section">
                 <h3>Chronological Foundations</h3>
+                <div class="filter-controls">
+                    <label><input type="radio" name="tableFilter" value="all" checked onchange="filterTable()"> Show All</label>
+                    <label><input type="radio" name="tableFilter" value="trappist" onchange="filterTable()"> Trappist Only</label>
+                    <label><input type="radio" name="tableFilter" value="historic" onchange="filterTable()"> Historic Only</label>
+                </div>
                 <div class="table-container">
-                    <table>
+                    <table id="foundationTable">
                         <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>County</th>
-                                <th>Date</th>
-                            </tr>
+                            <tr><th>Name</th><th>County</th><th>Date</th><th>Type</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>St. Mary's, Dublin</td><td>Dublin</td><td>1139</td></tr>
-                            <tr><td>Mellifont Abbey</td><td>Louth</td><td>1142</td></tr>
-                            <tr><td>Bective Abbey</td><td>Meath</td><td>1147</td></tr>
-                            <tr><td>Baltinglass Abbey</td><td>Wicklow</td><td>1148</td></tr>
-                            <tr><td>Boyle Abbey</td><td>Roscommon</td><td>1148</td></tr>
-                            <tr><td>Inislounaght (Suir)</td><td>Tipperary</td><td>1148</td></tr>
-                            <tr><td>Monasteranenagh</td><td>Limerick</td><td>1148</td></tr>
-                            <tr><td>Abbeyshrule</td><td>Longford</td><td>1150</td></tr>
-                            <tr><td>Kilbeggan Abbey</td><td>Westmeath</td><td>1150</td></tr>
-                            <tr><td>Newry Abbey</td><td>Down</td><td>1153</td></tr>
-                            <tr><td>Abbeydorney</td><td>Kerry</td><td>1154</td></tr>
-                            <tr><td>Kilenny Abbey</td><td>Kilkenny</td><td>1162</td></tr>
-                            <tr><td>Fermoy Abbey</td><td>Cork</td><td>1170</td></tr>
-                            <tr><td>Glangragh Abbey</td><td>Waterford</td><td>1170</td></tr>
-                            <tr><td>Abbeymahon</td><td>Cork</td><td>1172</td></tr>
-                            <tr><td>Dunbrody Abbey</td><td>Wexford</td><td>1175</td></tr>
-                            <tr><td>Inch Abbey</td><td>Down</td><td>1177</td></tr>
-                            <tr><td>Monasterevin Abbey</td><td>Kildare</td><td>1178</td></tr>
-                            <tr><td>Assaroe Abbey</td><td>Donegal</td><td>1178</td></tr>
-                            <tr><td>Holy Cross Abbey</td><td>Tipperary</td><td>1180</td></tr>
-                            <tr><td>Jerpoint Abbey</td><td>Kilkenny</td><td>1180</td></tr>
-                            <tr><td>Midleton Abbey</td><td>Cork</td><td>1180</td></tr>
-                            <tr><td>Abbeyleix</td><td>Laois</td><td>1184</td></tr>
-                            <tr><td>Kilcooly Abbey</td><td>Tipperary</td><td>1185</td></tr>
-                            <tr><td>Abbeyknockmoy</td><td>Galway</td><td>1190</td></tr>
-                            <tr><td>Grey Abbey</td><td>Down</td><td>1193</td></tr>
-                            <tr><td>Corcomroe Abbey</td><td>Clare</td><td>1194</td></tr>
-                            <tr><td>Comber Abbey</td><td>Down</td><td>1199</td></tr>
-                            <tr><td>Tintern Abbey</td><td>Wexford</td><td>1200</td></tr>
-                            <tr><td>Duiske Abbey</td><td>Kilkenny</td><td>1204</td></tr>
-                            <tr><td>Abington Abbey</td><td>Limerick</td><td>1206</td></tr>
-                            <tr><td>Abbey of Lerha</td><td>Longford</td><td>1214</td></tr>
-                            <tr><td>Macosquin Abbey</td><td>Londonderry</td><td>1218</td></tr>
-                            <tr><td>Tracton Abbey</td><td>Cork</td><td>1224</td></tr>
-                            <tr><td>Hore Abbey</td><td>Tipperary</td><td>1272</td></tr>
+                            <tr data-type="trappist"><td>Mount Melleray Abbey</td><td>Waterford</td><td>1832</td><td>Trappist</td></tr>
+                            <tr data-type="trappist"><td>New Mellifont Abbey</td><td>Louth</td><td>1938</td><td>Trappist</td></tr>
+                            <tr data-type="trappist"><td>St. Mary's, Glencairn</td><td>Waterford</td><td>1932</td><td>Trappist</td></tr>
+                            <tr data-type="historic"><td>St. Mary's, Dublin</td><td>Dublin</td><td>1139</td><td>Historic</td></tr>
+                            <tr data-type="historic"><td>Mellifont Abbey</td><td>Louth</td><td>1142</td><td>Historic</td></tr>
+                            <tr data-type="historic"><td>Bective Abbey</td><td>Meath</td><td>1147</td><td>Historic</td></tr>
+                            <tr data-type="historic"><td>Jerpoint Abbey</td><td>Kilkenny</td><td>1180</td><td>Historic</td></tr>
+                            <tr data-type="historic"><td>Holy Cross Abbey</td><td>Tipperary</td><td>1180</td><td>Historic</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -116,6 +93,51 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
+    <script>
+        let map;
+        let markers = [];
+        const sites = [
+            { name: "Mount Melleray Abbey", lat: 52.17, lng: -7.88, type: 'trappist' },
+            { name: "New Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'trappist' },
+            { name: "St. Mary's, Glencairn", lat: 52.13, lng: -7.97, type: 'trappist' },
+            { name: "Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'historic' },
+            { name: "Jerpoint Abbey", lat: 52.51, lng: -7.16, type: 'historic' }
+        ];
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if (pageId === 'location-map') {
+                if (!map) {
+                    map = L.map('map').setView([53.3, -8.0], 7);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                }
+                setTimeout(() => { map.invalidateSize(); updateMap(); }, 100);
+            }
+        }
+
+        function updateMap() {
+            markers.forEach(m => map.removeLayer(m));
+            markers = [];
+            const filter = document.querySelector('input[name="mapFilter"]:checked').value;
+            sites.forEach(s => {
+                if (filter === 'all' || s.type === filter) {
+                    markers.push(L.marker([s.lat, s.lng]).addTo(map).bindPopup(s.name));
+                }
+            });
+        }
+
+        function filterTable() {
+            const filter = document.querySelector('input[name="tableFilter"]:checked').value;
+            const rows = document.querySelectorAll('#foundationTable tbody tr');
+            rows.forEach(row => {
+                if (filter === 'all' || row.getAttribute('data-type') === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
