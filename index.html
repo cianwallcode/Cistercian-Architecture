@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cistercian Architecture</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="showPage('landing')">Cistercian Architecture</div>
+        <nav>
+            <button onclick="showPage('location-map')">Location Map</button>
+            <button onclick="showPage('detail-analysis')">Detail Analysis</button>
+        </nav>
+    </header>
+
+    <main id="app">
+        <section id="landing" class="page active">
+            <h1>The Cistercian Paradigm</h1>
+            <p>An exploration of structural austerity and the 12th-century monastic reformation.</p>
+            <button class="cta-button" onclick="showPage('location-map')">Start Project</button>
+            <div class="spacer"></div>
+            <p>The Cistercian Order, or <em>Ordo Cisterciensis</em>, emphasized a return to strict adherence to the Rule of Saint Benedict. Architecturally, this manifested as a rejection of Cluniac ornamentation, favoring geometric purity, light, and the manipulation of spatial volumes to facilitate spiritual contemplation.</p>
+        </section>
+
+        <section id="location-map" class="page">
+            <h2>Location Map</h2>
+            <div id="map-placeholder">
+                [Geospatial distribution of Cistercian Abbeys: Citeaux, Clairvaux, La Ferté, Pontigny, Morimond]
+            </div>
+            <p>The diffusion of the Order followed a rigid filiation system. Each foundation maintained structural homogeneity, often utilizing the "Bernardin plan" to ensure liturgical efficiency.</p>
+        </section>
+
+        <section id="detail-analysis" class="page">
+            <h2>Detail Analysis: Structural Morphology</h2>
+            <p>Cistercian morphology is characterized by:</p>
+            <ul>
+                <li><strong>The Pointed Arch:</strong> Utilized for structural efficacy, allowing for higher, thinner walls and maximized verticality.</li>
+                <li><strong>The Cloister:</strong> Defined by a square peripteral space, central to the monastic movement, acting as a transition zone between the profane and the divine.</li>
+                <li><strong>Absence of Ornamentation:</strong> The intentional exclusion of figurative sculpture and stained glass, prioritizing the interplay of light on raw stone surfaces.</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Cistercian Architecture Research Initiative. All rights reserved.</p>
+        <p>Contact: archives@cistercian-arch.edu</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
