@@ -14,6 +14,7 @@
         nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
         nav button:hover { background: var(--txt); color: var(--bg); }
         
+        /* Core SPA Logic: All pages are hidden by default, only .active shows */
         .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
         .page.active { display: block; }
         
@@ -91,6 +92,11 @@
         </section>
     </main>
 
+    <footer>
+        <p>&copy; 2026 Cistercian Architecture Research Initiative. All rights reserved.</p>
+        <p>Contact: archives@cistercian-arch.edu</p>
+    </footer>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
@@ -101,14 +107,17 @@
             .then(res => res.json())
             .then(data => {
                 siteData = data.sites;
-                renderMap('all');
                 renderCatalogue(data.catalogue);
             });
 
         function showPage(pageId) {
+            // Hides all pages including 'landing'
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Shows selected page
             const target = document.getElementById(pageId);
             if(target) target.classList.add('active');
+            
+            // Handle map resize if showing map
             if (pageId === 'location-map') {
                 if(!map) initMap();
                 setTimeout(() => map.invalidateSize(), 100);
@@ -118,11 +127,13 @@
         function initMap() {
             map = L.map('map').setView([53.3, -8.0], 7);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map);
+            updateMap();
         }
 
         function updateMap() {
-            const filter = document.querySelector('input[name="mapFilter"]:checked').value;
+            if(!map) return;
             map.eachLayer(layer => { if(layer instanceof L.Marker) map.removeLayer(layer); });
+            const filter = document.querySelector('input[name="mapFilter"]:checked').value;
             siteData.forEach(s => {
                 if(filter === 'all' || s.type === filter) {
                     L.marker([s.lat, s.lng], { icon: blackIcon }).addTo(map).bindTooltip(s.name, {className:'map-tag'});
@@ -131,9 +142,12 @@
         }
 
         function renderCatalogue(items) {
-            document.getElementById('details-container').innerHTML = items.map(i => 
-                `<div class="detail-card"><h3>${i.title}</h3><p>${i.description}</p></div>`
-            ).join('');
+            const container = document.getElementById('details-container');
+            if(container) {
+                container.innerHTML = items.map(i => 
+                    `<div class="detail-card"><h3>${i.title}</h3><p>${i.description}</p></div>`
+                ).join('');
+            }
         }
     </script>
 </body>
