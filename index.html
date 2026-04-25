@@ -14,18 +14,20 @@
         nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
         nav button:hover { background: var(--txt); color: var(--bg); }
         
-        /* Ensures all pages are hidden by default */
+        /* Core Layout: All pages hidden by default, only .active is shown */
         .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
-        /* Only active page is visible */
         .page.active { display: block; }
         
+        /* Landing Page Specifics */
         #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
         .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
         
+        /* Map Styles */
         #map-container { height: 500px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
         .black-pin { background-color: #000; border: 2px solid #fff; border-radius: 50%; width: 12px; height: 12px; }
         
+        /* Content */
         .history-timeline { border-left: 1px solid var(--brd); padding-left: 2rem; }
         .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .detail-card { border: 1px solid var(--brd); padding: 1.5rem; }
@@ -52,7 +54,6 @@
                 <p>An exploration of Cistercian and Trappist structures, their history, and their unique architectural details.</p>
                 <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
             </div>
-            <div style="width: 200px; height: 200px; border: 1px solid #000;">[Image Placeholder]</div>
         </section>
 
         <section id="history" class="page">
@@ -80,35 +81,28 @@
         </section>
     </main>
 
+    <footer>
+        <p>&copy; 2026 Cistercian Architecture Research Initiative. All rights reserved.</p>
+    </footer>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
-        let siteData = [];
 
-        // Load data
         fetch('database.json')
             .then(res => res.json())
             .then(data => {
-                siteData = data.sites;
                 renderToContainer('details-container', data.architectural_details);
                 renderToContainer('catalogue-container', data.architectural_details);
             });
 
+        // Hides all pages, shows selected page
         function showPage(pageId) {
-            console.log("Navigating to: " + pageId); // Debugging line
-            
-            // 1. Remove .active from all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            
-            // 2. Add .active to the specific page
             const target = document.getElementById(pageId);
-            if(target) {
-                target.classList.add('active');
-            } else {
-                console.error("Page not found: " + pageId);
-            }
+            if(target) target.classList.add('active');
             
-            // 3. Map handling
+            // Re-initialize map if needed
             if (pageId === 'location-map') {
                 if(!map) initMap();
                 setTimeout(() => map.invalidateSize(), 100);
