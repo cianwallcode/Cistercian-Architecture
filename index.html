@@ -7,11 +7,7 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif' font-weight='bold'>C</text></svg>">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        :root { 
-            --bg: #ffffff; 
-            --txt: #000000; 
-            --brd: #000000; 
-        }
+        :root { --bg: #ffffff; --txt: #000000; --brd: #000000; }
         body { margin: 0; font-family: 'Times New Roman', serif; background-color: var(--bg); color: var(--txt); }
         header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid var(--brd); align-items: center; }
         .logo { font-weight: bold; cursor: pointer; font-size: 1.8rem; }
@@ -22,8 +18,10 @@
         .page.active { display: block; }
         
         /* Landing Page */
-        #landing { display: flex; flex-direction: column; align-items: flex-start; margin-top: 2rem; }
-        .intro-text { line-height: 1.6; font-size: 1.2rem; max-width: 700px; }
+        #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
+        .hero-logo { flex: 0 0 200px; border: 1px solid var(--brd); padding: 5px; }
+        .hero-logo img { width: 100%; display: block; }
+        .intro-text { line-height: 1.6; font-size: 1.2rem; }
         .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
         
         /* Details Grid */
@@ -53,12 +51,17 @@
 
     <main id="app">
         <section id="landing" class="page active">
-            <h1>The Cistercian Paradigm</h1>
-            <div class="intro-text">
-                <p>The Order of Cistercians of the Strict Observance (O.C.S.O.), or Trappists, emerged as a reform movement within the Benedictine tradition. Characterized by a rigorous dedication to the Rule of St. Benedict, the Order emphasizes a life of contemplation, manual labor, and communal prayer.</p>
-                <p>Cistercian architecture reflects this austere spiritual identity: functional, stripped of superfluous ornamentation, and harmoniously integrated with the landscape. This repository catalogues the historical foundations and active Trappist abbeys that embody the "Cistercian simplicity."</p>
+            <div style="flex:1;">
+                <h1>The Cistercian Paradigm</h1>
+                <div class="intro-text">
+                    <p>The Order of Cistercians of the Strict Observance (O.C.S.O.), or Trappists, emerged as a reform movement within the Benedictine tradition. Characterized by a rigorous dedication to the Rule of St. Benedict, the Order emphasizes a life of contemplation, manual labor, and communal prayer.</p>
+                    <p>Cistercian architecture reflects this austere spiritual identity: functional, stripped of superfluous ornamentation, and harmoniously integrated with the landscape. This repository catalogues the historical foundations and active Trappist abbeys that embody the "Cistercian simplicity."</p>
+                </div>
+                <button type="button" class="cta-button" onclick="showPage('location-map')">Learn More</button>
             </div>
-            <button type="button" class="cta-button" onclick="showPage('location-map')">Explore</button>
+            <div class="hero-logo">
+                <img src="logo.png" alt="Cistercian Logo">
+            </div>
         </section>
 
         <section id="location-map" class="page">
