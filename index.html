@@ -5,37 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cistercian Architecture</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif' font-weight='bold'>C</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif' font-weight='bold' fill='%23FF9800'>C</text></svg>">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        body { margin: 0; font-family: 'Times New Roman', serif; background-color: #ffffff; color: #000000; scroll-behavior: smooth; }
-        header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid #000000; align-items: center; }
-        .logo { font-weight: bold; cursor: pointer; font-size: 1.5rem; }
-        nav button { background: none; border: 1px solid #000000; padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: 'Helvetica', sans-serif; text-transform: uppercase;}
+        :root {
+            --orange: #FF9800;
+            --white: #ffffff;
+            --black: #000000;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Times New Roman', serif; 
+            background-color: var(--white); 
+            color: var(--black); 
+            scroll-behavior: smooth; 
+        }
+
+        header { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 2rem; 
+            border-bottom: 2px solid var(--orange); 
+            align-items: center; 
+        }
+
+        .logo { font-weight: bold; cursor: pointer; font-size: 1.5rem; color: var(--orange); }
         
-        .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 80vh; }
+        nav button { 
+            background: var(--white); 
+            border: 1px solid var(--orange); 
+            padding: 0.5rem 1rem; 
+            cursor: pointer; 
+            margin-left: 10px; 
+            font-family: 'Helvetica', sans-serif; 
+            text-transform: uppercase;
+        }
+        
+        .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
         .page.active { display: block; }
         
+        /* Landing Page Layout */
         #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
         .landing-text { flex: 1; }
         
-        .hero-logo { flex: 0 0 200px; text-align: right; border: 1px solid #000; padding: 5px; display: flex; justify-content: center; align-items: center; }
-        .hero-logo img { max-width: 100%; height: auto; object-fit: contain; }
+        .hero-logo { flex: 0 0 200px; text-align: right; border: 1px solid var(--orange); padding: 5px; }
+        .hero-logo img { max-width: 100%; height: auto; display: block; }
 
-        .cta-button { background: #000000; color: #ffffff; padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; font-family: 'Helvetica', sans-serif; display: inline-block; margin-top: 2rem;}
+        .cta-button { 
+            background: var(--orange); 
+            color: var(--white); 
+            padding: 1rem 2rem; 
+            border: none; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            font-weight: bold; 
+            font-family: 'Helvetica', sans-serif; 
+            margin-top: 2rem;
+        }
         
-        #map-container { height: 500px; width: 100%; border: 1px solid #000000; margin-top: 1rem; }
+        #map-container { height: 500px; width: 100%; border: 1px solid var(--black); margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
         
-        footer { border-top: 1px solid #000000; padding: 2rem; text-align: center; font-size: 0.8rem; margin-top: 4rem; clear: both;}
+        footer { border-top: 2px solid var(--orange); padding: 2rem; text-align: center; font-size: 0.8rem; margin-top: 4rem; }
         
         .table-container { overflow-x: auto; margin-top: 2rem; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #000000; padding: 12px; text-align: left; font-family: 'Helvetica', sans-serif;}
-        th { background-color: #000000; color: #ffffff; }
+        th, td { border: 1px solid var(--black); padding: 12px; text-align: left; }
+        th { background-color: var(--orange); color: var(--white); }
         
-        .filter-controls { margin-bottom: 1rem; padding: 1rem; background: #f0f0f0; border: 1px solid #000000; }
+        .filter-controls { margin-bottom: 1rem; padding: 1rem; background: #fff4e5; border: 1px solid var(--orange); }
     </style>
 </head>
 <body>
@@ -43,8 +83,10 @@
     <header>
         <div class="logo" onclick="showPage('landing')">Cistercian Architecture</div>
         <nav>
-            <button onclick="showPage('location-map')">Location Map</button>
-            <button onclick="showPage('detail-analysis')">Detail Analysis</button>
+            <button onclick="showPage('location-map')">Map</button>
+            <button onclick="showPage('detail-analysis')">Analysis</button>
+            <button onclick="showPage('inventory')">Inventory</button>
+            <button onclick="showPage('comparison')">Comparison</button>
         </nav>
     </header>
 
@@ -52,7 +94,7 @@
         <section id="landing" class="page active">
             <div class="landing-text">
                 <h1>The Cistercian Paradigm</h1>
-                <p>An architectural and historical analysis of the Order of Cistercians in Ireland, examining the transition from the 12th-century foundations to modern observance.</p>
+                <p>An architectural and historical analysis of the Order of Cistercians in Ireland.</p>
                 <button class="cta-button" onclick="showPage('location-map')">Learn more</button>
             </div>
             <div class="hero-logo">
@@ -63,34 +105,26 @@
         <section id="location-map" class="page">
             <h2>Location Map</h2>
             <div class="filter-controls">
-                <label><input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All Foundations</label>
-                <label><input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist (O.C.S.O.) Only</label>
+                <label><input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All</label>
+                <label><input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist</label>
             </div>
             <div id="map-container"><div id="map"></div></div>
         </section>
 
         <section id="detail-analysis" class="page">
             <h2>Detail Analysis</h2>
-            <div class="filter-controls">
-                <label><input type="radio" name="tableFilter" value="all" checked onchange="filterTable()"> Show All</label>
-                <label><input type="radio" name="tableFilter" value="trappist" onchange="filterTable()"> Trappist Only</label>
-                <label><input type="radio" name="tableFilter" value="historic" onchange="filterTable()"> Historic Only</label>
-            </div>
-            
             <div class="table-container">
                 <table id="foundationTable">
-                    <thead>
-                        <tr><th>Name</th><th>County</th><th>Date</th><th>Type</th></tr>
-                    </thead>
+                    <thead><tr><th>Name</th><th>County</th><th>Type</th></tr></thead>
                     <tbody>
-                        <tr data-type="trappist"><td>Mount Melleray Abbey</td><td>Waterford</td><td>1832</td><td>Trappist</td></tr>
-                        <tr data-type="trappist"><td>New Mellifont Abbey</td><td>Louth</td><td>1938</td><td>Trappist</td></tr>
-                        <tr data-type="trappist"><td>St. Mary's, Glencairn</td><td>Waterford</td><td>1932</td><td>Trappist</td></tr>
-                        <tr data-type="historic"><td>Mellifont Abbey</td><td>Louth</td><td>1142</td><td>Historic</td></tr>
+                        <tr data-type="trappist"><td>Mount Melleray</td><td>Waterford</td><td>Trappist</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
+
+        <section id="inventory" class="page"><h2>Inventory</h2><p>Inventory list coming soon.</p></section>
+        <section id="comparison" class="page"><h2>Comparison</h2><p>Comparison data coming soon.</p></section>
     </main>
 
     <footer>
@@ -101,50 +135,16 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
-        let markers = [];
-        const sites = [
-            { name: "Mount Melleray Abbey", lat: 52.17, lng: -7.88, type: 'trappist' },
-            { name: "New Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'trappist' },
-            { name: "St. Mary's, Glencairn", lat: 52.13, lng: -7.97, type: 'trappist' },
-            { name: "Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'historic' }
-        ];
-
         function showPage(pageId) {
-            console.log("Navigating to: " + pageId); // Added for debugging
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-            } else {
-                console.error("Page element not found: " + pageId);
-            }
-            
+            document.getElementById(pageId).classList.add('active');
             if (pageId === 'location-map') {
                 if (!map) {
                     map = L.map('map').setView([53.3, -8.0], 7);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
                 }
-                setTimeout(() => { map.invalidateSize(); updateMap(); }, 100);
+                setTimeout(() => map.invalidateSize(), 100);
             }
-        }
-
-        function updateMap() {
-            markers.forEach(m => map.removeLayer(m));
-            markers = [];
-            const filter = document.querySelector('input[name="mapFilter"]:checked').value;
-            sites.forEach(s => {
-                if (filter === 'all' || s.type === filter) {
-                    markers.push(L.marker([s.lat, s.lng]).addTo(map).bindPopup(s.name));
-                }
-            });
-        }
-
-        function filterTable() {
-            const filter = document.querySelector('input[name="tableFilter"]:checked').value;
-            const rows = document.querySelectorAll('#foundationTable tbody tr');
-            rows.forEach(row => {
-                row.style.display = (filter === 'all' || row.getAttribute('data-type') === filter) ? '' : 'none';
-            });
         }
     </script>
 </body>
