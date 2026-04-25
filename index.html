@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cistercian Architecture</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif' font-weight='bold'>C</text></svg>">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root { --bg: #ffffff; --txt: #000000; --brd: #000000; }
@@ -22,26 +21,21 @@
         #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
         .hero-logo { flex: 0 0 200px; border: 1px solid var(--brd); padding: 5px; }
         .hero-logo img { width: 100%; display: block; }
-        .intro-text { line-height: 1.6; font-size: 1.2rem; }
-        .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; z-index: 10; position: relative; }
+        .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
         
-        /* History Page */
-        .history-timeline { border-left: 1px solid var(--brd); padding-left: 2rem; margin-top: 2rem; }
-        .timeline-event { margin-bottom: 2rem; }
-        .timeline-event h3 { margin: 0; }
-        
-        /* Details Grid */
-        .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
-        .detail-card { border: 1px solid var(--brd); padding: 1.5rem; }
-
+        /* Map Styles */
         #map-container { height: 500px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
+        .black-pin { background-color: #000; border: 2px solid #fff; border-radius: 50%; width: 12px; height: 12px; }
+        .map-tag { background: #fff; border: 1px solid #000; font-size: 10px; padding: 2px; }
+        .filter-controls { margin-bottom: 1rem; }
+
+        /* History & Details */
+        .history-timeline { border-left: 1px solid var(--brd); padding-left: 2rem; }
+        .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .detail-card { border: 1px solid var(--brd); padding: 1.5rem; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
-        th, td { border: 1px solid var(--brd); padding: 12px; text-align: left; }
-        th { background-color: var(--txt); color: var(--bg); }
-        
-        footer { border-top: 1px solid var(--brd); padding: 2rem; text-align: center; font-size: 0.8rem; margin-top: 4rem; }
+        footer { border-top: 1px solid var(--brd); padding: 2rem; text-align: center; }
     </style>
 </head>
 <body>
@@ -51,46 +45,44 @@
         <nav>
             <button type="button" onclick="showPage('history')">History</button>
             <button type="button" onclick="showPage('location-map')">Map</button>
-            <button type="button" onclick="showPage('detail-analysis')">Analysis</button>
+            <button type="button" onclick="showPage('architectural-details')">Architectural Details</button>
             <button type="button" onclick="showPage('catalogue')">Catalogue</button>
         </nav>
     </header>
 
     <main id="app">
         <section id="landing" class="page active">
-            <div style="flex:1;">
+            <div>
                 <h1>The Cistercian Paradigm</h1>
-                <div class="intro-text">
-                    <p>The Order of Cistercians of the Strict Observance (O.C.S.O.), or Trappists, emerged as a reform movement within the Benedictine tradition. Characterized by a rigorous dedication to the Rule of St. Benedict, the Order emphasizes a life of contemplation, manual labor, and communal prayer.</p>
-                </div>
+                <p>An analysis of the Cistercian and Trappist orders.</p>
                 <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
             </div>
-            <div class="hero-logo"><img src="image_e1fb5c.jpg" alt="Cistercian Logo"></div>
+            <div class="hero-logo"><img src="image_e1fb5c.jpg" alt="Logo"></div>
         </section>
 
         <section id="history" class="page">
-            <h2>Chronology of the Order</h2>
+            <h2>History of the Order</h2>
             <div class="history-timeline">
-                <div class="timeline-event"><h3>1098: The Foundation</h3><p>St. Robert of Molesme, seeking a stricter adherence to the Rule of St. Benedict, founded the monastery of Cîteaux.</p></div>
-                <div class="timeline-event"><h3>1112: St. Bernard’s Reform</h3><p>St. Bernard of Clairvaux joined the order, leading a massive expansion and codifying the austere Cistercian identity.</p></div>
-                <div class="timeline-event"><h3>1142: Cistercians in Ireland</h3><p>St. Malachy invited the Cistercians to Ireland, leading to the foundation of Mellifont Abbey in Louth.</p></div>
-                <div class="timeline-event"><h3>1664: The Trappist Reform</h3><p>Abbot de Rancé implemented the "Strict Observance" at La Trappe, emphasizing silence, manual labor, and austerity.</p></div>
-                <div class="timeline-event"><h3>1832: The Irish Trappist Branch</h3><p>Re-establishment of the order in Ireland at Mount Melleray and subsequent foundations.</p></div>
-                <div class="timeline-event"><h3>2026: Contemporary Renewal</h3><p>The Order marks a new chapter with the formation of the new Trappist community, continuing the tradition of contemplative life in the modern era.</p></div>
+                <div class="timeline-event"><h3>1098: The Foundation</h3><p>St. Robert founds Cîteaux.</p></div>
+                <div class="timeline-event"><h3>1112: St. Bernard</h3><p>Reform and expansion.</p></div>
+                <div class="timeline-event"><h3>1664: Trappist Reform</h3><p>Stricter observance initiated.</p></div>
+                <div class="timeline-event"><h3>2026: New Community</h3><p>Continued contemplative tradition.</p></div>
             </div>
         </section>
 
         <section id="location-map" class="page">
             <h2>Location Map</h2>
+            <div class="filter-controls">
+                <label><input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All</label>
+                <label><input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist</label>
+                <label><input type="radio" name="mapFilter" value="historic" onchange="updateMap()"> Cistercian</label>
+            </div>
             <div id="map-container"><div id="map"></div></div>
         </section>
 
-        <section id="detail-analysis" class="page">
-            <h2>Detail Analysis</h2>
-            <table id="foundationTable">
-                <thead><tr><th>Name</th><th>County</th><th>Date</th></tr></thead>
-                <tbody></tbody>
-            </table>
+        <section id="architectural-details" class="page">
+            <h2>Cistercian Architectural Details</h2>
+            <p>Cistercian architecture is defined by an uncompromising simplicity. Abandoning the Romanesque ornamentation, it utilized the pointed arch to permit higher, thinner walls, facilitating light—a metaphor for the divine—without the distraction of complex figurative sculpture.</p>
         </section>
 
         <section id="catalogue" class="page">
@@ -99,48 +91,49 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 Cistercian Architecture Research Initiative. All rights reserved.</p>
-        <p>Contact: archives@cistercian-arch.edu</p>
-    </footer>
-
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
+        let siteData = [];
+        const blackIcon = L.divIcon({ className: 'black-pin', iconSize: [12, 12], iconAnchor: [6, 6] });
+
         fetch('database.json')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                const sites = data.sites || (Array.isArray(data) ? data : []);
-                const details = data.details || [];
-                renderMap(sites);
-                renderTable(sites);
-                renderCatalogue(details);
-            })
-            .catch(err => console.error("Data load error:", err));
+                siteData = data.sites;
+                renderMap('all');
+                renderCatalogue(data.catalogue);
+            });
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const target = document.getElementById(pageId);
             if(target) target.classList.add('active');
-            if (pageId === 'location-map' && map) setTimeout(() => map.invalidateSize(), 100);
+            if (pageId === 'location-map') {
+                if(!map) initMap();
+                setTimeout(() => map.invalidateSize(), 100);
+            }
         }
 
-        function renderMap(sites) {
+        function initMap() {
             map = L.map('map').setView([53.3, -8.0], 7);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map);
-            sites.forEach(s => L.marker([s.lat, s.lng]).addTo(map).bindPopup(s.name));
         }
 
-        function renderTable(sites) {
-            const tbody = document.querySelector('#foundationTable tbody');
-            tbody.innerHTML = '';
-            sites.forEach(s => tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.county}</td><td>${s.date}</td></tr>`);
+        function updateMap() {
+            const filter = document.querySelector('input[name="mapFilter"]:checked').value;
+            map.eachLayer(layer => { if(layer instanceof L.Marker) map.removeLayer(layer); });
+            siteData.forEach(s => {
+                if(filter === 'all' || s.type === filter) {
+                    L.marker([s.lat, s.lng], { icon: blackIcon }).addTo(map).bindTooltip(s.name, {className:'map-tag'});
+                }
+            });
         }
 
-        function renderCatalogue(details) {
-            const container = document.getElementById('details-container');
-            container.innerHTML = '';
-            details.forEach(d => container.innerHTML += `<div class="detail-card"><h3>${d.title}</h3><p>${d.description}</p></div>`);
+        function renderCatalogue(items) {
+            document.getElementById('details-container').innerHTML = items.map(i => 
+                `<div class="detail-card"><h3>${i.title}</h3><p>${i.description}</p></div>`
+            ).join('');
         }
     </script>
 </body>
