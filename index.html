@@ -17,11 +17,9 @@
         .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 80vh; }
         .page.active { display: block; }
         
-        /* Landing Page Layout */
         #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
         .landing-text { flex: 1; }
         
-        /* Right-side logo styling */
         .hero-logo { flex: 0 0 200px; text-align: right; border: 1px solid #000; padding: 5px; display: flex; justify-content: center; align-items: center; }
         .hero-logo img { max-width: 100%; height: auto; object-fit: contain; }
 
@@ -55,7 +53,7 @@
             <div class="landing-text">
                 <h1>The Cistercian Paradigm</h1>
                 <p>An architectural and historical analysis of the Order of Cistercians in Ireland, examining the transition from the 12th-century foundations to modern observance.</p>
-                <button class="cta-button" onclick="showPage('location-map')">Start Project</button>
+                <button class="cta-button" onclick="showPage('location-map')">Learn more</button>
             </div>
             <div class="hero-logo">
                 <img src="image_e1fb5c.jpg" alt="Cistercian Architecture Illustration">
@@ -112,8 +110,15 @@
         ];
 
         function showPage(pageId) {
+            console.log("Navigating to: " + pageId); // Added for debugging
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            } else {
+                console.error("Page element not found: " + pageId);
+            }
+            
             if (pageId === 'location-map') {
                 if (!map) {
                     map = L.map('map').setView([53.3, -8.0], 7);
