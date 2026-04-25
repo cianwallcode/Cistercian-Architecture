@@ -3,102 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cistercian Architecture</title>
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif' font-weight='bold'>C</text></svg>">
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <title>What's for Dinner</title>
     <style>
-        :root { --bg: #ffffff; --txt: #000000; --brd: #000000; }
-        body { margin: 0; font-family: 'Times New Roman', serif; background-color: var(--bg); color: var(--txt); }
-        header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid var(--brd); align-items: center; }
-        .logo { font-weight: bold; cursor: pointer; font-size: 1.5rem; }
-        
-        nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
-        
-        .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
-        .page.active { display: block; }
-        
-        #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
-        .hero-logo { flex: 0 0 200px; text-align: right; border: 1px solid var(--brd); padding: 5px; }
-        .hero-logo img { max-width: 100%; height: auto; display: block; }
+        :root {
+            --orange: #FF8C00;
+            --white: #FFFFFF;
+            --charcoal: #222222;
+        }
 
-        .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
-        
-        #map-container { height: 500px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
-        #map { height: 100%; width: 100%; }
-        
-        footer { border-top: 1px solid var(--brd); padding: 2rem; text-align: center; font-size: 0.8rem; margin-top: 4rem; }
-        .table-container { overflow-x: auto; margin-top: 2rem; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid var(--brd); padding: 12px; text-align: left; }
-        th { background-color: var(--txt); color: var(--bg); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        body { background-color: var(--white); color: var(--charcoal); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+        header { padding: 2rem; position: absolute; top: 0; left: 0; width: 100%; z-index: 10; }
+        .logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; text-transform: uppercase; cursor: pointer; text-decoration: none; color: var(--charcoal); }
+
+        #app-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .step { display: none; opacity: 0; transition: opacity 0.6s ease-in-out; text-align: center; width: 100%; max-width: 500px; }
+        .step.active { display: block; opacity: 1; }
+
+        h1 { font-size: 2.5rem; text-transform: uppercase; margin-bottom: 2rem; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .card { border: 2px solid var(--charcoal); padding: 2rem; cursor: pointer; transition: 0.2s; font-weight: bold; }
+        .card:hover { border-color: var(--orange); background: var(--orange); color: var(--white); }
+
+        #recipe-display { text-align: left; background: #f9f9f9; padding: 2rem; border: 1px solid #eee; }
+        .nutrient-bar { height: 8px; background: #ddd; margin: 10px 0; }
+        .nutrient-fill { height: 100%; background: var(--orange); width: 80%; }
+
+        footer { padding: 1rem; text-align: center; font-size: 0.6rem; color: #aaa; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="location.reload()">Cistercian Architecture</div>
-        <nav>
-            <button type="button" onclick="showPage('location-map')">Map</button>
-            <button type="button" onclick="showPage('detail-analysis')">Analysis</button>
-        </nav>
+        <a href="javascript:location.reload()" class="logo">What's for Dinner</a>
     </header>
 
-    <main id="app">
-        <section id="landing" class="page active">
-            <div style="flex:1;">
-                <h1>The Cistercian Paradigm</h1>
-                <p>An architectural and historical analysis of the Order of Cistercians in Ireland.</p>
-                <button type="button" class="cta-button" onclick="showPage('location-map')">Learn more</button>
+    <main id="app-container">
+        <div id="step-1" class="step active">
+            <h1>Select Protein</h1>
+            <div class="grid">
+                <div class="card" onclick="saveChoice('protein', 'Salmon', 'step-2')">Salmon</div>
+                <div class="card" onclick="saveChoice('protein', 'Beef', 'step-2')">Beef</div>
             </div>
-            <div class="hero-logo">
-                <img src="image_e1fb5c.jpg" alt="Illustration">
-            </div>
-        </section>
+        </div>
 
-        <section id="location-map" class="page">
-            <h2>Location Map</h2>
-            <div id="map-container"><div id="map"></div></div>
-        </section>
-
-        <section id="detail-analysis" class="page">
-            <h2>Detail Analysis</h2>
-            <div class="table-container">
-                <table id="foundationTable">
-                    <thead><tr><th>Name</th><th>County</th></tr></thead>
-                    <tbody><tr><td>Mount Melleray</td><td>Waterford</td></tr></tbody>
-                </table>
+        <div id="step-2" class="step">
+            <h1>Select Carb</h1>
+            <div class="grid">
+                <div class="card" onclick="saveChoice('carb', 'Quinoa', 'step-3')">Quinoa</div>
+                <div class="card" onclick="saveChoice('carb', 'Sweet Potato', 'step-3')">Sweet Potato</div>
             </div>
-        </section>
+        </div>
+
+        <div id="step-3" class="step">
+            <h1>Select Store</h1>
+            <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="card" onclick="saveChoice('store', 'Lidl', 'step-4')">Lidl</div>
+                <div class="card" onclick="saveChoice('store', 'Dunnes', 'step-4')">Dunnes</div>
+                <div class="card" onclick="saveChoice('store', 'Aldi', 'step-4')">Aldi</div>
+            </div>
+        </div>
+
+        <div id="step-4" class="step">
+            <h1>Dinner Ready</h1>
+            <div id="recipe-display">
+                <h3 id="recipe-title"></h3>
+                <p id="recipe-desc" style="margin: 1rem 0;"></p>
+                <div class="nutrient-bar"><div class="nutrient-fill"></div></div>
+                <small>Optimized for 70kg Maintenance</small>
+            </div>
+            <button onclick="location.reload()" style="margin-top:20px; padding: 1rem 2rem; background: var(--charcoal); color: white; border: none; font-weight: bold; cursor: pointer; width: 100%;">RESTART</button>
+        </div>
     </main>
 
-    <footer><p>&copy; 2026 Cistercian Architecture Research Initiative. All rights reserved.</p></footer>
+    <footer>
+        <p>&copy; 2026 What's for Dinner. All Rights Reserved.</p>
+    </footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        let map;
-        
-        function showPage(pageId) {
-            console.log("Navigating to: " + pageId); // Check console for this output
-            
-            // Hide all
-            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-            
-            // Show target
-            const target = document.getElementById(pageId);
-            if(target) {
-                target.style.display = 'block';
-            }
+        const state = { protein: '', carb: '', store: '' };
 
-            // Map init
-            if (pageId === 'location-map') {
-                if (!map) {
-                    map = L.map('map').setView([53.3, -8.0], 7);
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                }
-                setTimeout(() => map.invalidateSize(), 100);
+        function saveChoice(key, value, nextId) {
+            state[key] = value;
+            if(nextId === 'step-4') {
+                renderResult();
             }
+            nextStep(nextId);
+        }
+
+        function nextStep(nextId) {
+            const current = document.querySelector('.step.active');
+            current.classList.remove('active');
+            setTimeout(() => {
+                current.style.display = 'none';
+                const next = document.getElementById(nextId);
+                next.style.display = 'block';
+                setTimeout(() => next.classList.add('active'), 50);
+            }, 600);
+        }
+
+        function renderResult() {
+            const recipes = {
+                "Salmon|Quinoa": "Lemon-Herb Crusted Salmon served over a fluffy Quinoa bed with sautéed spinach. Rich in Omega-3s.",
+                "Salmon|Sweet Potato": "Oven-baked Salmon Fillet paired with roasted Sweet Potato wedges and steamed broccoli.",
+                "Beef|Quinoa": "Pan-seared Beef strips with a Quinoa stir-fry, peppers, and onions. High iron and B12 content.",
+                "Beef|Sweet Potato": "Grilled Lean Steak with garlic-infused Sweet Potato mash and kale. Optimized for post-workout recovery."
+            };
+
+            const key = `${state.protein}|${state.carb}`;
+            document.getElementById('recipe-title').innerText = `${state.protein} & ${state.carb} at ${state.store}`;
+            document.getElementById('recipe-desc').innerText = recipes[key] || "Custom fusion meal created for your nutritional needs.";
         }
     </script>
 </body>
