@@ -9,6 +9,7 @@
     <style>
         :root { --bg: #ffffff; --txt: #000000; --brd: #000000; }
         body { margin: 0; font-family: 'Times New Roman', serif; background-color: var(--bg); color: var(--txt); }
+        
         header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid var(--brd); align-items: center; }
         .logo { font-weight: bold; cursor: pointer; font-size: 1.8rem; }
         nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
@@ -22,7 +23,12 @@
         .hero-logo { flex: 0 0 200px; border: 1px solid var(--brd); padding: 5px; }
         .hero-logo img { width: 100%; display: block; }
         .intro-text { line-height: 1.6; font-size: 1.2rem; }
-        .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
+        .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; z-index: 10; position: relative; }
+        
+        /* History Page */
+        .history-timeline { border-left: 1px solid var(--brd); padding-left: 2rem; margin-top: 2rem; }
+        .timeline-event { margin-bottom: 2rem; }
+        .timeline-event h3 { margin: 0; }
         
         /* Details Grid */
         .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
@@ -43,6 +49,7 @@
     <header>
         <div class="logo" onclick="showPage('landing')">Cistercian Architecture</div>
         <nav>
+            <button type="button" onclick="showPage('history')">History</button>
             <button type="button" onclick="showPage('location-map')">Map</button>
             <button type="button" onclick="showPage('detail-analysis')">Analysis</button>
             <button type="button" onclick="showPage('catalogue')">Catalogue</button>
@@ -55,12 +62,21 @@
                 <h1>The Cistercian Paradigm</h1>
                 <div class="intro-text">
                     <p>The Order of Cistercians of the Strict Observance (O.C.S.O.), or Trappists, emerged as a reform movement within the Benedictine tradition. Characterized by a rigorous dedication to the Rule of St. Benedict, the Order emphasizes a life of contemplation, manual labor, and communal prayer.</p>
-                    <p>Cistercian architecture reflects this austere spiritual identity: functional, stripped of superfluous ornamentation, and harmoniously integrated with the landscape. This repository catalogues the historical foundations and active Trappist abbeys that embody the "Cistercian simplicity."</p>
                 </div>
-                <button type="button" class="cta-button" onclick="showPage('location-map')">Learn More</button>
+                <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
             </div>
-            <div class="hero-logo">
-                <img src="image_e1fb5c.jpg" alt="Cistercian Logo">
+            <div class="hero-logo"><img src="image_e1fb5c.jpg" alt="Cistercian Logo"></div>
+        </section>
+
+        <section id="history" class="page">
+            <h2>Chronology of the Order</h2>
+            <div class="history-timeline">
+                <div class="timeline-event"><h3>1098: The Foundation</h3><p>St. Robert of Molesme, seeking a stricter adherence to the Rule of St. Benedict, founded the monastery of Cîteaux.</p></div>
+                <div class="timeline-event"><h3>1112: St. Bernard’s Reform</h3><p>St. Bernard of Clairvaux joined the order, leading a massive expansion and codifying the austere Cistercian identity.</p></div>
+                <div class="timeline-event"><h3>1142: Cistercians in Ireland</h3><p>St. Malachy invited the Cistercians to Ireland, leading to the foundation of Mellifont Abbey in Louth.</p></div>
+                <div class="timeline-event"><h3>1664: The Trappist Reform</h3><p>Abbot de Rancé implemented the "Strict Observance" at La Trappe, emphasizing silence, manual labor, and austerity.</p></div>
+                <div class="timeline-event"><h3>1832: The Irish Trappist Branch</h3><p>Re-establishment of the order in Ireland at Mount Melleray and subsequent foundations.</p></div>
+                <div class="timeline-event"><h3>2026: Contemporary Renewal</h3><p>The Order marks a new chapter with the formation of the new Trappist community, continuing the tradition of contemplative life in the modern era.</p></div>
             </div>
         </section>
 
@@ -91,28 +107,22 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
-        
         fetch('database.json')
             .then(response => response.json())
             .then(data => {
-                // Safeguard: Extract data regardless of whether it's an object or array
                 const sites = data.sites || (Array.isArray(data) ? data : []);
                 const details = data.details || [];
-                
                 renderMap(sites);
                 renderTable(sites);
                 renderCatalogue(details);
             })
-            .catch(err => console.error("Database load error:", err));
+            .catch(err => console.error("Data load error:", err));
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const target = document.getElementById(pageId);
             if(target) target.classList.add('active');
-            
-            if (pageId === 'location-map' && map) {
-                setTimeout(() => map.invalidateSize(), 100);
-            }
+            if (pageId === 'location-map' && map) setTimeout(() => map.invalidateSize(), 100);
         }
 
         function renderMap(sites) {
@@ -124,22 +134,13 @@
         function renderTable(sites) {
             const tbody = document.querySelector('#foundationTable tbody');
             tbody.innerHTML = '';
-            sites.forEach(s => {
-                tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.county}</td><td>${s.date}</td></tr>`;
-            });
+            sites.forEach(s => tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.county}</td><td>${s.date}</td></tr>`);
         }
 
         function renderCatalogue(details) {
             const container = document.getElementById('details-container');
             container.innerHTML = '';
-            details.forEach(d => {
-                container.innerHTML += `
-                    <div class="detail-card">
-                        <h3>${d.title}</h3>
-                        <p>${d.description}</p>
-                    </div>
-                `;
-            });
+            details.forEach(d => container.innerHTML += `<div class="detail-card"><h3>${d.title}</h3><p>${d.description}</p></div>`);
         }
     </script>
 </body>
