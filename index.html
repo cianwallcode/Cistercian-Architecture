@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cistercian Architecture</title>
+    <link rel="icon" href="osco.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root { --bg: #ffffff; --txt: #000000; --brd: #000000; }
@@ -11,18 +12,26 @@
         
         header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid var(--brd); align-items: center; }
         .logo { font-weight: bold; cursor: pointer; font-size: 1.8rem; }
+        nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
+        nav button:hover { background: var(--txt); color: var(--bg); }
         
-        /* STRICT HIDING: All pages are hidden by default */
         .page { display: none !important; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
-        /* Only active page is visible */
         .page.active { display: block !important; }
         
+        /* Landing Layout */
+        #landing { display: flex; align-items: center; justify-content: space-between; gap: 4rem; margin-top: 2rem; }
+        .hero-logo { width: 300px; height: auto; border: 1px solid var(--brd); padding: 5px; }
+        .hero-logo img { width: 100%; display: block; }
         .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
         
+        /* Map Styles */
         #map-container { height: 500px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
         .black-pin { background-color: #000; border: 2px solid #fff; border-radius: 50%; width: 12px; height: 12px; }
         
+        /* Details & History */
+        .history-timeline { border-left: 1px solid var(--brd); padding-left: 2rem; margin-top: 2rem; }
+        .timeline-event { margin-bottom: 2rem; }
         .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .detail-card { border: 1px solid var(--brd); padding: 1.5rem; }
     </style>
@@ -34,28 +43,39 @@
         <nav>
             <button type="button" onclick="showPage('history')">History</button>
             <button type="button" onclick="showPage('location-map')">Map</button>
-            <button type="button" onclick="showPage('architectural-details')">Architectural Details</button>
+            <button type="button" onclick="showPage('architectural-details')">Details</button>
             <button type="button" onclick="showPage('catalogue')">Catalogue</button>
         </nav>
     </header>
 
     <main id="app">
         <section id="landing" class="page active">
-            <h1>The Cistercian Paradigm</h1>
-            <p>An exploration of Cistercian and Trappist structures, their history, and their unique architectural details.</p>
-            <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
+            <div style="flex: 1;">
+                <h1>The Cistercian Paradigm</h1>
+                <p>An exploration of Cistercian and Trappist structures, their history, and their unique architectural details.</p>
+                <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
+            </div>
+            <div class="hero-logo"><img src="image_e1fb5c.jpg" alt="Cistercian Logo"></div>
         </section>
 
         <section id="history" class="page">
             <h2>History of the Order</h2>
             <div class="history-timeline">
-                <p>1098: The Foundation - St. Robert founds Cîteaux.</p>
-                <p>1112: St. Bernard - Reform and expansion.</p>
+                <div class="timeline-event"><h3>1098: The Foundation</h3><p>St. Robert founds the Cistercian Order at Cîteaux, seeking a return to the literal observance of the Rule of St. Benedict.</p></div>
+                <div class="timeline-event"><h3>1112: The Bernardian Era</h3><p>St. Bernard of Clairvaux joins the order, fueling massive expansion across Europe through his charismatic leadership and architectural influence.</p></div>
+                <div class="timeline-event"><h3>1115: Early Expansion</h3><p>Foundation of the first four daughter houses: La Ferté, Pontigny, Clairvaux, and Morimond.</p></div>
+                <div class="timeline-event"><h3>1664: The Trappist Reform</h3><p>Abbot Armand-Jean le Bouthillier de Rancé initiates a return to stricter observance at La Trappe Abbey, distinguishing the Trappist tradition.</p></div>
+                <div class="timeline-event"><h3>1892: Order Formation</h3><p>The Order of Cistercians of the Strict Observance (O.C.S.O.) is formally established as a distinct religious order.</p></div>
             </div>
         </section>
 
         <section id="location-map" class="page">
             <h2>Location Map</h2>
+            <div class="filter-controls">
+                <label><input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All Sites</label>
+                <label><input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist</label>
+                <label><input type="radio" name="mapFilter" value="historic" onchange="updateMap()"> Cistercian</label>
+            </div>
             <div id="map-container"><div id="map"></div></div>
         </section>
 
@@ -73,27 +93,23 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
+        let siteData = [];
 
         fetch('database.json')
             .then(res => res.json())
             .then(data => {
+                siteData = data.sites;
                 renderToContainer('details-container', data.architectural_details);
-                renderToContainer('catalogue-container', data.architectural_details);
+                renderSites('catalogue-container', data.sites);
             });
 
         function showPage(pageId) {
-            // 1. Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            
-            // 2. Show target page
             const target = document.getElementById(pageId);
             if(target) {
                 target.classList.add('active');
-                // 3. Reset scroll position so it feels like a new page
-                window.scrollTo(0, 0); 
+                window.scrollTo(0, 0);
             }
-            
-            // Map logic
             if (pageId === 'location-map') {
                 if(!map) initMap();
                 setTimeout(() => map.invalidateSize(), 100);
@@ -103,6 +119,20 @@
         function initMap() {
             map = L.map('map').setView([53.3, -8.0], 7);
             L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map);
+            updateMap();
+        }
+
+        function updateMap() {
+            if(!map) return;
+            map.eachLayer(layer => { if(layer instanceof L.Marker) map.removeLayer(layer); });
+            const filter = document.querySelector('input[name="mapFilter"]:checked').value;
+            siteData.forEach(s => {
+                if(filter === 'all' || s.type === filter) {
+                    L.marker([s.lat, s.lng], { icon: L.divIcon({ className: 'black-pin', iconSize: [12, 12], iconAnchor: [6, 6] }) })
+                     .addTo(map)
+                     .bindPopup(s.name);
+                }
+            });
         }
 
         function renderToContainer(containerId, items) {
@@ -110,6 +140,14 @@
             if(!container) return;
             container.innerHTML = (items || []).map(i => 
                 `<div class="detail-card"><h3>${i.title}</h3><p>${i.description}</p></div>`
+            ).join('');
+        }
+
+        function renderSites(containerId, sites) {
+            const container = document.getElementById(containerId);
+            if(!container) return;
+            container.innerHTML = (sites || []).map(s => 
+                `<div class="detail-card"><h3>${s.name}</h3><p>Type: ${s.type}</p></div>`
             ).join('');
         }
     </script>
