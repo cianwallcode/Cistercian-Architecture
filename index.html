@@ -14,20 +14,19 @@
         nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
         nav button:hover { background: var(--txt); color: var(--bg); }
         
+        /* Core SPA Logic: Ensures all sections (including landing) respect hidden/active states */
         .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
         .page.active { display: block; }
         
-        /* Landing Page */
         #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
+        .hero-logo { flex: 0 0 200px; border: 1px solid var(--brd); padding: 5px; }
+        .hero-logo img { width: 100%; display: block; }
         .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
         
-        /* Map Styles */
         #map-container { height: 500px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
         .black-pin { background-color: #000; border: 2px solid #fff; border-radius: 50%; width: 12px; height: 12px; }
-        .filter-controls { margin-bottom: 1rem; }
-
-        /* Content */
+        
         .history-timeline { border-left: 1px solid var(--brd); padding-left: 2rem; }
         .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .detail-card { border: 1px solid var(--brd); padding: 1.5rem; }
@@ -54,6 +53,7 @@
                 <p>An exploration of Cistercian and Trappist structures, their history, and their unique architectural details.</p>
                 <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
             </div>
+            <div class="hero-logo"><img src="image_e1fb5c.jpg" alt="Logo"></div>
         </section>
 
         <section id="history" class="page">
@@ -104,9 +104,11 @@
             });
 
         function showPage(pageId) {
+            // Selects all elements with .page class (includes landing) and hides them
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             const target = document.getElementById(pageId);
             if(target) target.classList.add('active');
+            
             if (pageId === 'location-map') {
                 if(!map) initMap();
                 setTimeout(() => map.invalidateSize(), 100);
