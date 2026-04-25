@@ -6,17 +6,16 @@
     <title>Cistercian Architecture</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        /* All rights reserved to the Cistercian Architecture Research Initiative */
         body { margin: 0; font-family: 'Times New Roman', serif; background-color: #ffffff; color: #000000; scroll-behavior: smooth; }
         header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid #000000; align-items: center; }
         .logo { font-weight: bold; cursor: pointer; font-size: 1.5rem; }
-        nav button { background: none; border: 1px solid #000000; padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: 'Helvetica', sans-serif;}
+        nav button { background: none; border: 1px solid #000000; padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: 'Helvetica', sans-serif; text-transform: uppercase;}
         
         .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 80vh; }
         .page.active { display: block; }
         
-        .landing-image { text-align: center; margin: 3rem 0; }
-        .landing-image img { max-width: 100%; height: auto; border: 1px solid #000000; }
+        .hero-container { text-align: center; margin: 3rem 0; }
+        .hero-container img { max-width: 100%; height: auto; border: 1px solid #000; padding: 5px; }
 
         .cta-button { background: #000000; color: #ffffff; padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; font-family: 'Helvetica', sans-serif;}
         
@@ -31,7 +30,6 @@
         th { background-color: #000000; color: #ffffff; }
         
         .filter-controls { margin-bottom: 1rem; padding: 1rem; background: #f0f0f0; border: 1px solid #000000; }
-
         .analysis-section { margin-top: 3rem; border-top: 2px solid #000; padding-top: 2rem; }
         .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; }
         .feature-box { border: 1px solid #000; padding: 1rem; }
@@ -53,8 +51,8 @@
             <h1>The Cistercian Paradigm</h1>
             <p>An architectural and historical analysis of the Order of Cistercians in Ireland, examining the transition from the 12th-century foundations to modern observance.</p>
             
-            <div class="landing-image">
-                <img src="image_e21276.jpg" alt="Cistercian Architecture Illustration">
+            <div class="hero-container">
+                <img src="image_e1fb5c.jpg" alt="Cistercian Architecture Illustration">
             </div>
             
             <button class="cta-button" onclick="showPage('location-map')">Start Project</button>
@@ -62,7 +60,6 @@
 
         <section id="location-map" class="page">
             <h2>Location Map</h2>
-            <p>Geospatial distribution of Cistercian monasteries in Ireland. Toggle below to isolate the modern Trappist communities.</p>
             <div class="filter-controls">
                 <label><input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All Foundations</label>
                 <label><input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist (O.C.S.O.) Only</label>
@@ -72,6 +69,12 @@
 
         <section id="detail-analysis" class="page">
             <h2>Detail Analysis</h2>
+            <div class="filter-controls">
+                <label><input type="radio" name="tableFilter" value="all" checked onchange="filterTable()"> Show All</label>
+                <label><input type="radio" name="tableFilter" value="trappist" onchange="filterTable()"> Trappist Only</label>
+                <label><input type="radio" name="tableFilter" value="historic" onchange="filterTable()"> Historic Only</label>
+            </div>
+            
             <div class="table-container">
                 <table id="foundationTable">
                     <thead>
@@ -79,6 +82,8 @@
                     </thead>
                     <tbody>
                         <tr data-type="trappist"><td>Mount Melleray Abbey</td><td>Waterford</td><td>1832</td><td>Trappist</td></tr>
+                        <tr data-type="trappist"><td>New Mellifont Abbey</td><td>Louth</td><td>1938</td><td>Trappist</td></tr>
+                        <tr data-type="trappist"><td>St. Mary's, Glencairn</td><td>Waterford</td><td>1932</td><td>Trappist</td></tr>
                         <tr data-type="historic"><td>Mellifont Abbey</td><td>Louth</td><td>1142</td><td>Historic</td></tr>
                     </tbody>
                 </table>
@@ -97,6 +102,8 @@
         let markers = [];
         const sites = [
             { name: "Mount Melleray Abbey", lat: 52.17, lng: -7.88, type: 'trappist' },
+            { name: "New Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'trappist' },
+            { name: "St. Mary's, Glencairn", lat: 52.13, lng: -7.97, type: 'trappist' },
             { name: "Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'historic' }
         ];
 
@@ -120,6 +127,14 @@
                 if (filter === 'all' || s.type === filter) {
                     markers.push(L.marker([s.lat, s.lng]).addTo(map).bindPopup(s.name));
                 }
+            });
+        }
+
+        function filterTable() {
+            const filter = document.querySelector('input[name="tableFilter"]:checked').value;
+            const rows = document.querySelectorAll('#foundationTable tbody tr');
+            rows.forEach(row => {
+                row.style.display = (filter === 'all' || row.getAttribute('data-type') === filter) ? '' : 'none';
             });
         }
     </script>
