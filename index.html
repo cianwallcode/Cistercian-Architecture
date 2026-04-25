@@ -7,116 +7,131 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='serif' font-weight='bold'>C</text></svg>">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        :root { --bg: #ffffff; --txt: #000000; --brd: #000000; }
+        :root { 
+            --bg: #ffffff; 
+            --txt: #000000; 
+            --brd: #000000; 
+        }
         body { margin: 0; font-family: 'Times New Roman', serif; background-color: var(--bg); color: var(--txt); }
         header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid var(--brd); align-items: center; }
-        .logo { font-weight: bold; cursor: pointer; font-size: 1.5rem; }
+        .logo { font-weight: bold; cursor: pointer; font-size: 1.8rem; }
         nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
+        nav button:hover { background: var(--txt); color: var(--bg); }
         
-        /* Custom Black Pin CSS */
-        .black-pin { background-color: #000; border: 2px solid #fff; border-radius: 50%; width: 12px; height: 12px; }
-        .map-tag { background: rgba(255,255,255,0.8); border: 1px solid #000; font-family: sans-serif; font-size: 10px; padding: 2px; }
-
         .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
         .page.active { display: block; }
-        #map-container { height: 600px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
+        
+        /* Landing Page */
+        #landing { display: flex; flex-direction: column; align-items: flex-start; margin-top: 2rem; }
+        .intro-text { line-height: 1.6; font-size: 1.2rem; max-width: 700px; }
+        .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
+        
+        /* Details Grid */
+        .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
+        .detail-card { border: 1px solid var(--brd); padding: 1.5rem; }
+
+        #map-container { height: 500px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
         
-        .filter-controls { margin-bottom: 1rem; padding: 1rem; background: #eee; border: 1px solid var(--brd); }
-        .table-container { overflow-x: auto; margin-top: 2rem; }
-        table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; }
         th, td { border: 1px solid var(--brd); padding: 12px; text-align: left; }
         th { background-color: var(--txt); color: var(--bg); }
+        
+        footer { border-top: 1px solid var(--brd); padding: 2rem; text-align: center; font-size: 0.8rem; margin-top: 4rem; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="location.reload()">Cistercian Architecture</div>
+        <div class="logo" onclick="showPage('landing')">Cistercian Architecture</div>
         <nav>
             <button type="button" onclick="showPage('location-map')">Map</button>
             <button type="button" onclick="showPage('detail-analysis')">Analysis</button>
+            <button type="button" onclick="showPage('catalogue')">Catalogue</button>
         </nav>
     </header>
 
     <main id="app">
-        <section id="location-map" class="page active">
-            <h2>Location Map</h2>
-            <div class="filter-controls">
-                <label><input type="radio" name="mapFilter" value="all" checked onchange="updateMap()"> All</label>
-                <label><input type="radio" name="mapFilter" value="trappist" onchange="updateMap()"> Trappist</label>
-                <label><input type="radio" name="mapFilter" value="historic" onchange="updateMap()"> Historic</label>
+        <section id="landing" class="page active">
+            <h1>The Cistercian Paradigm</h1>
+            <div class="intro-text">
+                <p>The Order of Cistercians of the Strict Observance (O.C.S.O.), or Trappists, emerged as a reform movement within the Benedictine tradition. Characterized by a rigorous dedication to the Rule of St. Benedict, the Order emphasizes a life of contemplation, manual labor, and communal prayer.</p>
+                <p>Cistercian architecture reflects this austere spiritual identity: functional, stripped of superfluous ornamentation, and harmoniously integrated with the landscape. This repository catalogues the historical foundations and active Trappist abbeys that embody the "Cistercian simplicity."</p>
             </div>
+            <button type="button" class="cta-button" onclick="showPage('location-map')">Explore</button>
+        </section>
+
+        <section id="location-map" class="page">
+            <h2>Location Map</h2>
             <div id="map-container"><div id="map"></div></div>
         </section>
 
         <section id="detail-analysis" class="page">
             <h2>Detail Analysis</h2>
-            <div class="table-container">
-                <table id="foundationTable">
-                    <thead><tr><th>Name</th><th>County</th><th>Date</th><th>Type</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+            <table id="foundationTable">
+                <thead><tr><th>Name</th><th>County</th><th>Date</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="catalogue" class="page">
+            <h2>Architectural Catalogue</h2>
+            <div id="details-container" class="details-grid"></div>
         </section>
     </main>
+
+    <footer>
+        <p>&copy; 2026 Cistercian Architecture Research Initiative. All rights reserved.</p>
+        <p>Contact: archives@cistercian-arch.edu</p>
+    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         let map;
-        let markers = [];
-        let sitesData = [];
-
-        // Custom Black Icon
-        const blackIcon = L.divIcon({
-            className: 'black-pin',
-            iconSize: [12, 12],
-            iconAnchor: [6, 6]
-        });
-
+        
         fetch('database.json')
             .then(response => response.json())
             .then(data => {
-                sitesData = data;
-                initMap();
-                populateTable();
+                renderMap(data.sites);
+                renderTable(data.sites);
+                renderCatalogue(data.details);
             });
-
-        function initMap() {
-            map = L.map('map').setView([53.3, -8.0], 7);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map);
-            updateMap();
-        }
-
-        function updateMap() {
-            markers.forEach(m => map.removeLayer(m));
-            markers = [];
-            const filter = document.querySelector('input[name="mapFilter"]:checked').value;
-            
-            sitesData.forEach(s => {
-                if (filter === 'all' || s.type === filter) {
-                    const marker = L.marker([s.lat, s.lng], { icon: blackIcon })
-                        .addTo(map)
-                        .bindTooltip(s.name, { permanent: false, direction: 'top', className: 'map-tag' })
-                        .bindPopup(`<b>${s.name}</b><br>${s.county}<br>Type: ${s.type}`);
-                    markers.push(marker);
-                }
-            });
-        }
-
-        function populateTable() {
-            const tbody = document.querySelector('#foundationTable tbody');
-            sitesData.forEach(s => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${s.name}</td><td>${s.county}</td><td>${s.date}</td><td>${s.type}</td>`;
-                tbody.appendChild(row);
-            });
-        }
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            if (pageId === 'location-map') setTimeout(() => map.invalidateSize(), 100);
+            const target = document.getElementById(pageId);
+            if(target) target.classList.add('active');
+            
+            if (pageId === 'location-map' && map) {
+                setTimeout(() => map.invalidateSize(), 100);
+            }
+        }
+
+        function renderMap(sites) {
+            map = L.map('map').setView([53.3, -8.0], 7);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png').addTo(map);
+            sites.forEach(s => L.marker([s.lat, s.lng]).addTo(map).bindPopup(s.name));
+        }
+
+        function renderTable(sites) {
+            const tbody = document.querySelector('#foundationTable tbody');
+            tbody.innerHTML = '';
+            sites.forEach(s => {
+                tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.county}</td><td>${s.date}</td></tr>`;
+            });
+        }
+
+        function renderCatalogue(details) {
+            const container = document.getElementById('details-container');
+            container.innerHTML = '';
+            details.forEach(d => {
+                container.innerHTML += `
+                    <div class="detail-card">
+                        <h3>${d.title}</h3>
+                        <p>${d.description}</p>
+                    </div>
+                `;
+            });
         }
     </script>
 </body>
