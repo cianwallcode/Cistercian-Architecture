@@ -6,28 +6,28 @@
     <title>Cistercian Architecture</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        :root { --primary-orange: #FF8C00; --bg-white: #ffffff; --text-black: #000000; }
-        body { margin: 0; font-family: 'Times New Roman', serif; background-color: var(--bg-white); color: var(--text-black); }
-        
-        header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 2px solid var(--primary-orange); align-items: center; }
+        body { margin: 0; font-family: 'Times New Roman', serif; background-color: #ffffff; color: #000000; }
+        header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid #000000; align-items: center; }
         .logo { font-weight: bold; cursor: pointer; font-size: 1.5rem; }
-        nav button { background: none; border: 1px solid var(--text-black); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; }
+        nav button { background: none; border: 1px solid #000000; padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; }
         
         .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 80vh; }
         .page.active { display: block; }
         
-        .cta-button { background: var(--primary-orange); color: var(--bg-white); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; }
+        .cta-button { background: #000000; color: #ffffff; padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; }
         
-        #map-container { height: 500px; width: 100%; border: 1px solid var(--text-black); margin-top: 1rem; }
+        #map-container { height: 500px; width: 100%; border: 1px solid #000000; margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
         
-        footer { border-top: 1px solid var(--text-black); padding: 2rem; text-align: center; font-size: 0.8rem; }
+        footer { border-top: 1px solid #000000; padding: 2rem; text-align: center; font-size: 0.8rem; }
         
         .table-container { overflow-x: auto; margin-top: 2rem; }
         table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .filter-controls { margin-bottom: 1rem; padding: 1rem; background: #f9f9f9; border: 1px solid #ddd; }
+        th, td { border: 1px solid #000000; padding: 12px; text-align: left; }
+        th { background-color: #000000; color: #ffffff; }
+        
+        .filter-controls { margin-bottom: 1rem; padding: 1rem; background: #f0f0f0; border: 1px solid #000000; }
+        .hero-img { max-width: 100%; height: auto; margin: 2rem 0; border: 1px solid #000000; }
     </style>
 </head>
 <body>
@@ -43,7 +43,9 @@
     <main id="app">
         <section id="landing" class="page active">
             <h1>The Cistercian Paradigm</h1>
-            <p>An architectural and historical analysis of the Order of Cistercians in Ireland.</p>
+            <p>An architectural and historical analysis of the Order of Cistercians in Ireland, examining the transition from the 12th-century foundations to modern observance.</p>
+            
+            <br>
             <button class="cta-button" onclick="showPage('location-map')">Start Project</button>
         </section>
 
@@ -58,32 +60,58 @@
 
         <section id="detail-analysis" class="page">
             <h2>Detail Analysis</h2>
-            
-            <section class="analysis-section">
-                <h3>Chronological Foundations</h3>
-                <div class="filter-controls">
-                    <label><input type="radio" name="tableFilter" value="all" checked onchange="filterTable()"> Show All</label>
-                    <label><input type="radio" name="tableFilter" value="trappist" onchange="filterTable()"> Trappist Only</label>
-                    <label><input type="radio" name="tableFilter" value="historic" onchange="filterTable()"> Historic Only</label>
-                </div>
-                <div class="table-container">
-                    <table id="foundationTable">
-                        <thead>
-                            <tr><th>Name</th><th>County</th><th>Date</th><th>Type</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr data-type="trappist"><td>Mount Melleray Abbey</td><td>Waterford</td><td>1832</td><td>Trappist</td></tr>
-                            <tr data-type="trappist"><td>New Mellifont Abbey</td><td>Louth</td><td>1938</td><td>Trappist</td></tr>
-                            <tr data-type="trappist"><td>St. Mary's, Glencairn</td><td>Waterford</td><td>1932</td><td>Trappist</td></tr>
-                            <tr data-type="historic"><td>St. Mary's, Dublin</td><td>Dublin</td><td>1139</td><td>Historic</td></tr>
-                            <tr data-type="historic"><td>Mellifont Abbey</td><td>Louth</td><td>1142</td><td>Historic</td></tr>
-                            <tr data-type="historic"><td>Bective Abbey</td><td>Meath</td><td>1147</td><td>Historic</td></tr>
-                            <tr data-type="historic"><td>Jerpoint Abbey</td><td>Kilkenny</td><td>1180</td><td>Historic</td></tr>
-                            <tr data-type="historic"><td>Holy Cross Abbey</td><td>Tipperary</td><td>1180</td><td>Historic</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+            <div class="filter-controls">
+                <label><input type="radio" name="tableFilter" value="all" checked onchange="filterTable()"> Show All</label>
+                <label><input type="radio" name="tableFilter" value="trappist" onchange="filterTable()"> Trappist Only</label>
+                <label><input type="radio" name="tableFilter" value="historic" onchange="filterTable()"> Historic Only</label>
+            </div>
+            <div class="table-container">
+                <table id="foundationTable">
+                    <thead>
+                        <tr><th>Name</th><th>County</th><th>Date</th><th>Type</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr data-type="trappist"><td>Mount Melleray Abbey</td><td>Waterford</td><td>1832</td><td>Trappist</td></tr>
+                        <tr data-type="trappist"><td>New Mellifont Abbey</td><td>Louth</td><td>1938</td><td>Trappist</td></tr>
+                        <tr data-type="trappist"><td>St. Mary's, Glencairn</td><td>Waterford</td><td>1932</td><td>Trappist</td></tr>
+                        <tr data-type="historic"><td>St. Mary's, Dublin</td><td>Dublin</td><td>1139</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Mellifont Abbey</td><td>Louth</td><td>1142</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Bective Abbey</td><td>Meath</td><td>1147</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Baltinglass Abbey</td><td>Wicklow</td><td>1148</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Boyle Abbey</td><td>Roscommon</td><td>1148</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Inislounaght (Suir)</td><td>Tipperary</td><td>1148</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Monasteranenagh</td><td>Limerick</td><td>1148</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Abbeyshrule</td><td>Longford</td><td>1150</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Kilbeggan Abbey</td><td>Westmeath</td><td>1150</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Newry Abbey</td><td>Down</td><td>1153</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Abbeydorney</td><td>Kerry</td><td>1154</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Kilenny Abbey</td><td>Kilkenny</td><td>1162</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Fermoy Abbey</td><td>Cork</td><td>1170</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Glangragh Abbey</td><td>Waterford</td><td>1170</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Abbeymahon</td><td>Cork</td><td>1172</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Dunbrody Abbey</td><td>Wexford</td><td>1175</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Inch Abbey</td><td>Down</td><td>1177</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Monasterevin Abbey</td><td>Kildare</td><td>1178</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Assaroe Abbey</td><td>Donegal</td><td>1178</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Holy Cross Abbey</td><td>Tipperary</td><td>1180</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Jerpoint Abbey</td><td>Kilkenny</td><td>1180</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Midleton Abbey</td><td>Cork</td><td>1180</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Abbeyleix</td><td>Laois</td><td>1184</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Kilcooly Abbey</td><td>Tipperary</td><td>1185</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Abbeyknockmoy</td><td>Galway</td><td>1190</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Grey Abbey</td><td>Down</td><td>1193</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Corcomroe Abbey</td><td>Clare</td><td>1194</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Comber Abbey</td><td>Down</td><td>1199</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Tintern Abbey</td><td>Wexford</td><td>1200</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Duiske Abbey</td><td>Kilkenny</td><td>1204</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Abington Abbey</td><td>Limerick</td><td>1206</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Abbey of Lerha</td><td>Longford</td><td>1214</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Macosquin Abbey</td><td>Londonderry</td><td>1218</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Tracton Abbey</td><td>Cork</td><td>1224</td><td>Historic</td></tr>
+                        <tr data-type="historic"><td>Hore Abbey</td><td>Tipperary</td><td>1272</td><td>Historic</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
 
@@ -101,7 +129,10 @@
             { name: "New Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'trappist' },
             { name: "St. Mary's, Glencairn", lat: 52.13, lng: -7.97, type: 'trappist' },
             { name: "Mellifont Abbey", lat: 53.75, lng: -6.45, type: 'historic' },
-            { name: "Jerpoint Abbey", lat: 52.51, lng: -7.16, type: 'historic' }
+            { name: "Jerpoint Abbey", lat: 52.51, lng: -7.16, type: 'historic' },
+            { name: "Holy Cross Abbey", lat: 52.65, lng: -7.86, type: 'historic' },
+            { name: "Corcomroe Abbey", lat: 53.11, lng: -9.15, type: 'historic' },
+            { name: "Dunbrody Abbey", lat: 52.26, lng: -6.93, type: 'historic' }
         ];
 
         function showPage(pageId) {
