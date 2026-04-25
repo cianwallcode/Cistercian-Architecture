@@ -11,28 +11,20 @@
         
         header { display: flex; justify-content: space-between; padding: 2rem; border-bottom: 1px solid var(--brd); align-items: center; }
         .logo { font-weight: bold; cursor: pointer; font-size: 1.8rem; }
-        nav button { background: none; border: 1px solid var(--brd); padding: 0.5rem 1rem; cursor: pointer; margin-left: 10px; font-family: sans-serif; text-transform: uppercase; }
-        nav button:hover { background: var(--txt); color: var(--bg); }
         
-        /* Core Layout: All pages hidden by default, only .active is shown */
-        .page { display: none; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
-        .page.active { display: block; }
+        /* STRICT HIDING: All pages are hidden by default */
+        .page { display: none !important; padding: 2rem; max-width: 900px; margin: 0 auto; min-height: 70vh; }
+        /* Only active page is visible */
+        .page.active { display: block !important; }
         
-        /* Landing Page Specifics */
-        #landing { display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-top: 2rem; }
         .cta-button { background: var(--txt); color: var(--bg); padding: 1rem 2rem; border: none; cursor: pointer; text-transform: uppercase; font-weight: bold; margin-top: 2rem; }
         
-        /* Map Styles */
         #map-container { height: 500px; width: 100%; border: 1px solid var(--brd); margin-top: 1rem; }
         #map { height: 100%; width: 100%; }
         .black-pin { background-color: #000; border: 2px solid #fff; border-radius: 50%; width: 12px; height: 12px; }
         
-        /* Content */
-        .history-timeline { border-left: 1px solid var(--brd); padding-left: 2rem; }
         .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .detail-card { border: 1px solid var(--brd); padding: 1.5rem; }
-        
-        footer { border-top: 1px solid var(--brd); padding: 2rem; text-align: center; margin-top: 4rem; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -49,19 +41,16 @@
 
     <main id="app">
         <section id="landing" class="page active">
-            <div>
-                <h1>The Cistercian Paradigm</h1>
-                <p>An exploration of Cistercian and Trappist structures, their history, and their unique architectural details.</p>
-                <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
-            </div>
+            <h1>The Cistercian Paradigm</h1>
+            <p>An exploration of Cistercian and Trappist structures, their history, and their unique architectural details.</p>
+            <button type="button" class="cta-button" onclick="showPage('history')">Learn More</button>
         </section>
 
         <section id="history" class="page">
             <h2>History of the Order</h2>
             <div class="history-timeline">
-                <div class="timeline-event"><h3>1098: The Foundation</h3><p>St. Robert founds Cîteaux.</p></div>
-                <div class="timeline-event"><h3>1112: St. Bernard</h3><p>Reform and expansion.</p></div>
-                <div class="timeline-event"><h3>1664: Trappist Reform</h3><p>Stricter observance initiated.</p></div>
+                <p>1098: The Foundation - St. Robert founds Cîteaux.</p>
+                <p>1112: St. Bernard - Reform and expansion.</p>
             </div>
         </section>
 
@@ -71,7 +60,7 @@
         </section>
 
         <section id="architectural-details" class="page">
-            <h2>Cistercian Architectural Details</h2>
+            <h2>Architectural Details</h2>
             <div id="details-container" class="details-grid"></div>
         </section>
 
@@ -80,10 +69,6 @@
             <div id="catalogue-container" class="details-grid"></div>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; 2026 Cistercian Architecture Research Initiative. All rights reserved.</p>
-    </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
@@ -96,13 +81,19 @@
                 renderToContainer('catalogue-container', data.architectural_details);
             });
 
-        // Hides all pages, shows selected page
         function showPage(pageId) {
+            // 1. Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(pageId);
-            if(target) target.classList.add('active');
             
-            // Re-initialize map if needed
+            // 2. Show target page
+            const target = document.getElementById(pageId);
+            if(target) {
+                target.classList.add('active');
+                // 3. Reset scroll position so it feels like a new page
+                window.scrollTo(0, 0); 
+            }
+            
+            // Map logic
             if (pageId === 'location-map') {
                 if(!map) initMap();
                 setTimeout(() => map.invalidateSize(), 100);
